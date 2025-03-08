@@ -1,15 +1,15 @@
 "use client"
 
-import { FC, ReactNode } from 'react';
-import { ButtonElement } from './button.elements'
+import { FC } from 'react';
+import { ButtonElement } from './button.elements';
+import { NavigationPropTypes } from './button.types';
 
-interface NavigationPropTypes {
-  children: string | ReactNode;
-  onClick: () => void;
-  className?: string;
-}
 
-const Navigation: FC<NavigationPropTypes> = ({ children, onClick, className }) => {
+const Navigation: FC<NavigationPropTypes> = ({
+  children,
+  onClick,
+  className
+}) => {
   return (
     <ButtonElement
       className={className}

@@ -13,6 +13,7 @@ const SelectInput: FC<SelectInputPropTypes> = ({
   value,
   onChange
 }) => {
+
   return (
     <SelectInputContainer className={className}>
       <MainLabel htmlFor="HeadlineAct">{label}</MainLabel>

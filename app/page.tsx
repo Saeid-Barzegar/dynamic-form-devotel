@@ -3,14 +3,14 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { inputDataMapper, insuranceTypesMapper } from "@/utils/helpers";
-import { ENDPOINTS } from "@/components/endpoints";
+import { ENDPOINTS } from "@/constants/endpoints";
 import SelectInput from "@/components/SelectInput";
 import isArray from "lodash/isArray";
 import isEmpty from "lodash/isEmpty";
 import { FieldType, SubFieldType, DynamicOptionsType } from "@/types/formType";
 import { get } from "lodash";
 import { COUNTRY_MAPPER } from "../constants/mappers";
-import Input from "@/components/Input/Input";
+import Input from "@/components/Input";
 import Radio from "@/components/Radio";
 import DateInput from "@/components/DateInput";
 import Button from "@/components/Button";

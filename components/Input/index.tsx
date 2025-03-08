@@ -1,9 +1,8 @@
 "use client"
 
-import { FC } from 'react'
-import { InputContainer, InputElement, InputLabel } from './styledElements';
-import { InputPropTypes } from './types';
-
+import { FC } from 'react';
+import { InputContainer, InputElement, InputLabel } from './input.elements';
+import { InputPropTypes } from './input.types';
 
 const Input: FC<InputPropTypes> = ({
   type = "text",

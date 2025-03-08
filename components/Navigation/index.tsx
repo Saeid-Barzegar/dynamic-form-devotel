@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { FC } from 'react';
 import { NAVIGATION_ITEMS } from '@/constants/navigation';
 import { BiSolidShieldPlus } from "react-icons/bi";
-import { NavigationItemType } from './navigation.type';
+import { NavigationItemType, NavigationPropTypes } from './navigation.types';
 
-interface NavigationPropTypes { };
+
 
 const Navigation: FC<NavigationPropTypes> = ({ }) => {
   return (

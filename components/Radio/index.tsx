@@ -1,8 +1,8 @@
 "use client"
 
 import { FC } from "react";
-import { DataItemType, RadioPropTypes } from "./types";
-import { MainContainer, MainLabel, RadioContainer, RadioElement, RadioLabel } from "./elements";
+import { DataItemType, RadioPropTypes } from "./radio.types";
+import { MainContainer, MainLabel, RadioContainer, RadioElement, RadioLabel } from "./radio.elements";
 
 
 const Radio: FC<RadioPropTypes> = ({
