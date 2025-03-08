@@ -1,101 +1,191 @@
-import Image from "next/image";
+"use client"
+
+import { ChangeEvent, useMemo, useState } from "react";
+import useFetch from "@/hooks/useFetch";
+import { inputDataMapper, insuranceTypesMapper } from "@/utils/helpers";
+import { ENDPOINTS } from "@/components/endpoints";
+import SelectInput from "@/components/SelectInput";
+import isArray from "lodash/isArray";
+import isEmpty from "lodash/isEmpty";
+import { FieldType, SubFieldType, DynamicOptionsType } from "@/types/formType";
+import { get } from "lodash";
+import { COUNTRY_MAPPER } from "../constants/mappers";
+import Input from "@/components/Input/Input";
+import Radio from "@/components/Radio";
+import DateInput from "@/components/DateInput";
+import Button from "@/components/Button";
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const API_BASE_URL = process.env.API_BASE_URL;
+  const { error, isPending, data } = useFetch(ENDPOINTS.FORMS);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  const [formState, setFormState] = useState<any>({
+    insuranceType: "",
+    country: "",
+    birthDate: "",
+  });
+
+  const insuranceTypes = useMemo(() => {
+    if (!isEmpty(data) && isArray(data)) {
+      return insuranceTypesMapper(data)
+    }
+    return [];
+  }, [data]);
+
+  const formData = useMemo(() => {
+    if (isArray(data) && !isEmpty(formState.insuranceType)) {
+      const filtered = data.filter(form => form.formId === formState.insuranceType)[0];
+      return filtered;
+    }
+    return {};
+  }, [formState.insuranceType]);
+
+  const hasVisibilityCondition = (subField: SubFieldType): boolean => {
+    const visibility = subField.visibility;
+    if (!visibility) return true;
+
+    const { dependsOn, condition, value } = visibility;
+    const dependencyValue = formState[dependsOn]?.toLowerCase();
+    const targetValue = value.toLowerCase();
+
+    return condition === "equals" ? dependencyValue === targetValue : false;
+  };
+
+  const handleDynamicOption = async (subField: SubFieldType) => {
+    // dynamicOptions : {dependsOn: 'country', endpoint: '/api/getStates', method: 'GET'}
+    if (!subField.dynamicOptions) return;
+
+    const dynamicOptions: DynamicOptionsType = subField.dynamicOptions;
+    const { dependsOn, endpoint, method } = dynamicOptions;
+    if (formState[dependsOn]) {
+      let query = '';
+      if (dependsOn === 'country') {
+        const countryName = COUNTRY_MAPPER[formState.country]
+        query = `?country=${countryName}`;
+      }
+
+      const dynamicData = await fetch(`/api/proxy?url=${API_BASE_URL}${endpoint}${query}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
+
+      const dynamicValue = await dynamicData.json();
+      console.log({ dynamicValue })
+    }
+  }
+
+
+  if (isPending) return <h1>Loading...</h1>;
+  if (error) return <h1>Oops! something went wrong</h1>;
+
+  return (
+    <div className="w-full flex flex-col px-6 pt-28 pb-18 jusify-center items-center">
+      <div className="w-1/2">
+        {(insuranceTypes.length > 0) && (
+          <SelectInput
+            className="w-1/2"
+            label="Select Insurance Type"
+            value={formState.insuranceType}
+            options={insuranceTypes}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              setFormState({ ...formState, insuranceType: event.target.value });
+            }}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        )}
+        {!isEmpty(formData) && (
+          <section className="">
+            <h3 className="text-2xl font-bold mb-6 mt-8">{formData.title}</h3>
+            {formData.fields.map((field: FieldType) => {
+              const subfields: any = get(field, 'fields', []);
+              return (
+                <div key={field.id} className="mt-8">
+                  {field.type === 'group' && (
+                    <>
+                      <h4 className="text-xl font-bold mb-4">{field.label}</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {subfields.map((subField: SubFieldType) => {
+                          console.log({ subField, type: subField.type });
+                          const isSubfieldVisible = hasVisibilityCondition(subField);
+                          if (subField.dynamicOptions) {
+                            handleDynamicOption(subField);
+                          }
+                          return (
+                            <div key={subField.id}>
+                              {!["text", "number", "select", "radio", 'date'].includes(subField.type) && (
+                                <label className="text-slate-400" htmlFor="">{`${subField.label} (${subField.type})`}</label>
+                              )}
+                              {isSubfieldVisible && (subField.type === "text" || subField.type === "number") && (
+                                <Input
+                                  label={subField.label}
+                                  type={subField.type}
+                                  name={subField.id}
+                                  value={formState[subField.id] || ""}
+                                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                                    setFormState({
+                                      ...formState,
+                                      [subField.id]: event.target.value
+                                    });
+                                  }}
+                                />
+                              )}
+                              {isSubfieldVisible && (subField.type === "select" && !isEmpty(subField.options) && isArray(subField.options)) && (
+                                <SelectInput
+                                  label={subField.label}
+                                  name={subField.id}
+                                  value={formState[subField.id]}
+                                  options={inputDataMapper(subField.options)}
+                                  onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                                    setFormState({
+                                      ...formState,
+                                      [subField.id]: event.target.value
+                                    });
+                                  }}
+                                />
+                              )}
+                              {isSubfieldVisible && (subField.type === "radio" && !isEmpty(subField.options) && isArray(subField.options)) && (
+                                <Radio
+                                  label={subField.label}
+                                  name={subField.id}
+                                  data={inputDataMapper(subField.options)}
+                                  selectedItem={formState[subField.id]}
+                                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                                    console.log({ value: event.target.value })
+                                    setFormState({
+                                      ...formState,
+                                      [subField.id]: event.target.value
+                                    });
+                                  }}
+                                />
+                              )}
+                              {subField.type === 'date' && (
+                                <DateInput
+                                  label="Date Of Birth"
+                                  date={formState.birthDate}
+                                  onSelect={date => {
+                                    console.log("onSelect", { date });
+                                    setFormState({
+                                      ...formState,
+                                      birthDate: date
+                                    });
+                                  }}
+                                />
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </section>
+        )}
+        <Button className="mt-4" onClick={() => { }}>Submit</Button>
+      </div>
     </div>
   );
 }
