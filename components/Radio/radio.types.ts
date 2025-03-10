@@ -1,4 +1,5 @@
-import { ChangeEvent, InputHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 export type DataItemType = {
   id: number;
@@ -7,9 +8,9 @@ export type DataItemType = {
 };
 
 export interface RadioPropTypes extends InputHTMLAttributes<HTMLInputElement> {
+  id: string;
   label: string;
-  name: string;
   data: DataItemType[];
-  selectedItem: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegisterReturn<string>;
+  error?: string;
 }

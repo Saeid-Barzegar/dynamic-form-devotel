@@ -1,9 +1,11 @@
 import { FiledDataItemType } from "@/types/formType";
-import { ChangeEvent, SelectHTMLAttributes } from "react";
+import { SelectHTMLAttributes } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 export interface SelectInputPropTypes extends SelectHTMLAttributes<HTMLSelectElement> {
+  id: string;
   label: string;
   options: FiledDataItemType[];
-  value: string;
-  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  register: UseFormRegisterReturn<string>;
+  error?: string;
 }

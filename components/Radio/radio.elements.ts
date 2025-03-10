@@ -2,7 +2,7 @@ import tw from "tailwind-styled-components";
 
 export const MainContainer = tw.div`mt-4`;
 
-export const MainLabel = tw.label`block mb-4`;
+export const MainLabel = tw.span`block mb-4`;
 
 export const RadioContainer = tw.div`flex items-center space-x-2 mb-2 pl-2`;
 

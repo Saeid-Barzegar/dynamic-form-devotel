@@ -8,10 +8,12 @@ import { NavigationPropTypes } from './button.types';
 const Navigation: FC<NavigationPropTypes> = ({
   children,
   onClick,
-  className
+  className,
+  type = 'button'
 }) => {
   return (
     <ButtonElement
+      type={type}
       className={className}
       onClick={onClick}
     >{children}</ButtonElement>

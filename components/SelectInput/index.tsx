@@ -3,27 +3,23 @@
 import { FC } from 'react';
 import { FiledDataItemType } from '@/types/formType';
 import { SelectInputPropTypes } from './selectInput.types';
-import { SelectInputContainer, MainLabel, SelectBox, SelectOption } from './selectInput.elements'
+import { SelectInputContainer, MainLabel, SelectBox, SelectOption } from './selectInput.elements';
 import { IoChevronDown } from "react-icons/io5";
 
 const SelectInput: FC<SelectInputPropTypes> = ({
+  id,
   label,
   className,
   options,
-  value,
-  onChange
+  register,
+  error
 }) => {
 
   return (
     <SelectInputContainer className={className}>
-      <MainLabel htmlFor="HeadlineAct">{label}</MainLabel>
+      <MainLabel htmlFor={id}>{label}</MainLabel>
       <IoChevronDown className="text-lg absolute right-3 bottom-[15px] text-gray-500" />
-      <SelectBox
-        id="HeadlineAct"
-        name="HeadlineAct"
-        value={value}
-        onChange={onChange}
-      >
+      <SelectBox id={id} {...register} >
         <option value="" className='text-gray-400'>-- Select an option --</option>
         {options.map((item: FiledDataItemType) => (
           <SelectOption key={item.id} value={item.value}>

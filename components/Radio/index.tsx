@@ -1,34 +1,31 @@
-"use client"
+"use client";
 
 import { FC } from "react";
 import { DataItemType, RadioPropTypes } from "./radio.types";
 import { MainContainer, MainLabel, RadioContainer, RadioElement, RadioLabel } from "./radio.elements";
 
-
 const Radio: FC<RadioPropTypes> = ({
+  id,
   label,
-  name,
   data,
-  selectedItem,
-  onChange
+  register,
+  error
 }) => {
-  console.log({ data })
   return (
     <MainContainer>
-      <MainLabel htmlFor="">{label}</MainLabel>
+      <MainLabel>{label}</MainLabel>
       {data.map((radio: DataItemType) => (
         <RadioContainer key={radio.id}>
           <RadioElement
+            id={`${id}-${radio.value}`}
             type="radio"
-            name={name}
-            id={radio.value}
             value={radio.value}
-            checked={radio.value === selectedItem}
-            onChange={onChange}
+            {...register}
           />
-          <RadioLabel htmlFor={radio.value}>{radio.label}</RadioLabel>
+          <RadioLabel htmlFor={`${id}-${radio.value}`}>{radio.label}</RadioLabel>
         </RadioContainer>
       ))}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </MainContainer>
   );
 };

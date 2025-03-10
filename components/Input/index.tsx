@@ -5,23 +5,20 @@ import { InputContainer, InputElement, InputLabel } from './input.elements';
 import { InputPropTypes } from './input.types';
 
 const Input: FC<InputPropTypes> = ({
+  id,
   type = "text",
-  name,
-  value,
   label,
-  placeholder,
-  onChange,
+  register,
+  className,
   ...otherProps
 }) => {
   return (
-    <InputContainer>
-      <InputLabel htmlFor={name}>{label}</InputLabel>
+    <InputContainer className={className}>
+      <InputLabel htmlFor={id}>{label}</InputLabel>
       <InputElement
+        id={id}
         type={type}
-        value={value}
-        id={name}
-        onChange={onChange}
-        placeholder=""
+        {...register}
         {...otherProps}
       />
     </InputContainer>
