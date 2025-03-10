@@ -1,3 +1,5 @@
+import { UseFormRegisterReturn } from 'react-hook-form';
+
 type CheckBoxOption = {
   id: number;
   label: string;
@@ -7,6 +9,6 @@ type CheckBoxOption = {
 export interface CheckBoxGroupProps {
   label: string;
   options: CheckBoxOption[];
-  selectedItems: string[];
-  onChange: (selected: string[]) => void;
+  register: UseFormRegisterReturn<string>;
+  error?: string;
 }

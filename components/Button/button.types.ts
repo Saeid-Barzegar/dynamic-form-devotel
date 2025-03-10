@@ -1,9 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, ButtonHTMLAttributes } from 'react';
 
-export interface NavigationPropTypes {
+export interface NavigationPropTypes extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: string | ReactNode;
-  onClick?: () => void;
   className?: string;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
 }

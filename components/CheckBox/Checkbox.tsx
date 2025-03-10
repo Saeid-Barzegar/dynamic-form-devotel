@@ -3,34 +3,29 @@
 import { FC } from "react";
 import { CheckBoxContainer, CheckBoxElement, CheckBoxItem, CheckBoxLabel } from "./checkbox.elements";
 import { CheckBoxGroupProps } from "./checkbox.types";
+import { ErrorMessage } from "@/elements/comman.element";
 
-
-
-
-
-
-const CheckBoxGroup: FC<CheckBoxGroupProps> = ({ label, options, selectedItems, onChange }) => {
-
-  const handleCheckboxChange = (value: string) => {
-    const updatedSelected = selectedItems.includes(value)
-      ? selectedItems.filter((item) => item !== value)
-      : [...selectedItems, value];
-    onChange(updatedSelected);
-  };
+const CheckBoxGroup: FC<CheckBoxGroupProps> = ({
+  label,
+  options,
+  register,
+  error
+}) => {
 
   return (
     <CheckBoxContainer>
+      <p>{label}</p>
       {options.map((option) => (
         <CheckBoxItem key={option.id}>
           <CheckBoxElement
             type="checkbox"
             value={option.value}
-            checked={selectedItems.includes(option.value)}
-            onChange={() => handleCheckboxChange(option.value)}
+            {...register}
           />
           <CheckBoxLabel>{option.label}</CheckBoxLabel>
         </CheckBoxItem>
       ))}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </CheckBoxContainer>
   );
 };

@@ -1,23 +1,27 @@
 "use client"
 
 import { useMemo, useState, useEffect } from "react";
-import useFetch from "@/hooks/useFetch";
-import { inputDataMapper, insuranceTypesMapper, getDynamicFields, hasVisibilityCondition } from "@/utils/helpers";
-import { ENDPOINTS } from "@/constants/endpoints";
-import SelectInput from "@/components/SelectInput";
+import { useRouter } from "next/navigation";
+import get from "lodash/get";
 import isArray from "lodash/isArray";
 import isEmpty from "lodash/isEmpty";
-import { SubFieldType } from "@/types/formType";
-import { get } from "lodash";
-import Input from "@/components/Input";
-import Radio from "@/components/Radio";
-import DateInput from "@/components/DateInput";
-import Button from "@/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-
+import { inputDataMapper, insuranceTypesMapper, getDynamicFields, hasVisibilityCondition } from "@/utils/helpers";
+import useFetch from "@/hooks/useFetch";
+import { ENDPOINTS } from "@/constants/endpoints";
+import { SubFieldType } from "@/types/formType";
+import SelectInput from "@/components/SelectInput/Select";
+import Input from "@/components/Input/Input";
+import Radio from "@/components/Radio/Radio";
+import DateInput from "@/components/DateInput/DateInput";
+import Button from "@/components/Button/Button";
+import CheckBoxGroup from "@/components/CheckBox/Checkbox";
+import { MainContainer } from "@/components/Radio/radio.elements";
+import { PageContainer } from "@/elements/comman.element";
 
 export default function Home() {
+  const API_BASE_URL = process.env.API_BASE_URL;
+  const router = useRouter();
   const { error, isPending, data } = useFetch(ENDPOINTS.FORMS);
   const {
     reset,
@@ -29,17 +33,28 @@ export default function Home() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit: SubmitHandler<any> = (data) => {
-    delete data.insuranceType
-    console.log("onSubmit", { data, errors })
+  const onSubmit: SubmitHandler<any> = async (data: FormData) => {
+    const URL = `${API_BASE_URL}${ENDPOINTS.FORM_SUBMIT}`
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: data
+    });
+
+    console.log(">>>", { response })
+    if (response.ok) {
+      router.push('/submissions')
+    }
   };
 
   const [dynamicField, setDynamicField] = useState<string[]>([]);
-  const [dynamicFieldIsPending, setDynamicFieldIsPending] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const insuranceTypes = useMemo(() => Array.isArray(data) ? insuranceTypesMapper(data) : [], [data]);
 
   const { insuranceType, smoker, country } = watch();
+
+  console.log({ insuranceType, smoker, country })
 
   const formData = useMemo(() => {
     if (isArray(data) && !isEmpty(insuranceType)) {
@@ -58,13 +73,14 @@ export default function Home() {
 
   useEffect(() => {
     if (dynamicField.length > 0) {
-      setDynamicFieldIsPending(false)
+      setIsLoading(false)
     }
   }, [dynamicField]);
 
   useEffect(() => {
     if (dynamicField.length > 0) {
       setDynamicField([])
+      setIsLoading(false)
     }
   }, [country]);
 
@@ -95,8 +111,8 @@ export default function Home() {
 
     if (dynamicOptions) {
       const dependsOn = get(field, 'dynamicOptions.dependsOn', '');
-      if (!dynamicFieldIsPending && !isEmpty(dependsOn) && isEmpty(dynamicField)) {
-        setDynamicFieldIsPending(true)
+      if (!isLoading && !isEmpty(watch(dependsOn)) && isEmpty(dynamicField)) {
+        setIsLoading(true)
         getDynamicFields({
           field,
           watch,
@@ -151,6 +167,13 @@ export default function Home() {
             onSelect={dateOfBirthChangedHandler}
           />
         )}
+        {type === 'checkbox' && (
+          <CheckBoxGroup
+            label={label}
+            options={inputDataMapper(options ?? [])}
+            register={{ ...register(id, validationRules) }}
+          />
+        )}
       </div>
     );
   }
@@ -159,7 +182,7 @@ export default function Home() {
   if (error) return <h1>Oops! something went wrong</h1>;
 
   return (
-    <div className="w-full flex flex-col px-6 pt-36 md:pt-28 pb-18 jusify-center items-center">
+    <PageContainer>
       <div className="w-full md:w-1/2">
         <form onSubmit={handleSubmit(onSubmit)}>
           {insuranceTypes.length > 0 && (
@@ -192,13 +215,10 @@ export default function Home() {
             </section>
           )}
           {watch('insuranceType') && (
-            <Button
-              type="submit"
-              className="mt-8"
-            >Submit</Button>
+            <Button type="submit" className="mt-8">Submit</Button>
           )}
         </form>
       </div>
-    </div>
+    </PageContainer>
   );
 }

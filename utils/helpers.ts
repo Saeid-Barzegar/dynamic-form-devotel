@@ -70,3 +70,13 @@ export const getDynamicFields: (data: DynamicFieldInputTypes) => Promise<void> =
     console.error("Error fetching dynamic field data:", error);
   }
 };
+
+export const mapCulumnsToShowInTable = (columnVisibility: Record<string, boolean>) => {
+  const newList = []
+  for (let item in columnVisibility) {
+    if (columnVisibility[item] === true) {
+      newList.push(item)
+    }
+  }
+  return newList;
+}

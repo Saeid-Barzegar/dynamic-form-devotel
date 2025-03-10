@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { DataItemType, RadioPropTypes } from "./radio.types";
 import { MainContainer, MainLabel, RadioContainer, RadioElement, RadioLabel } from "./radio.elements";
+import { ErrorMessage } from "@/elements/comman.element";
 
 const Radio: FC<RadioPropTypes> = ({
   id,
@@ -25,7 +26,7 @@ const Radio: FC<RadioPropTypes> = ({
           <RadioLabel htmlFor={`${id}-${radio.value}`}>{radio.label}</RadioLabel>
         </RadioContainer>
       ))}
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </MainContainer>
   );
 };
