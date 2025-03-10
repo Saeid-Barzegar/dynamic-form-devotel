@@ -5,4 +5,5 @@ export interface NavigationPropTypes {
   onClick?: () => void;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }

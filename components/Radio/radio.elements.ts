@@ -13,3 +13,5 @@ export const RadioElement = tw.input`
 `;
 
 export const RadioLabel = tw.label`cursor-pointer`;
+
+export const ErrorMessage = tw.p`text-red-500 text-sm mt-1`;

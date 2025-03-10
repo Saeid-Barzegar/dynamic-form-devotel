@@ -9,14 +9,18 @@ const Navigation: FC<NavigationPropTypes> = ({
   children,
   onClick,
   className,
-  type = 'button'
+  type = 'button',
+  disabled = false,
 }) => {
   return (
     <ButtonElement
-      type={type}
       className={className}
+      type={type}
       onClick={onClick}
-    >{children}</ButtonElement>
+      disabled={disabled}
+    >
+      {children}
+    </ButtonElement>
   )
 }
 
