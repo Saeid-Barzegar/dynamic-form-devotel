@@ -5,4 +5,6 @@ export type NavigationItemType = {
   path: string;
 }
 
-export interface NavigationPropTypes { };
+export interface NavigationPropTypes {
+  title: string;
+ };
