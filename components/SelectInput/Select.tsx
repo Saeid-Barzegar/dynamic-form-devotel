@@ -5,6 +5,7 @@ import { FiledDataItemType } from '@/types/formType';
 import { SelectInputPropTypes } from './selectInput.types';
 import { SelectInputContainer, MainLabel, SelectBox, SelectOption } from './selectInput.elements';
 import { IoChevronDown } from "react-icons/io5";
+import { ErrorMessage } from '@/elements/common.element';
 
 const SelectInput: FC<SelectInputPropTypes> = ({
   id,
@@ -27,6 +28,7 @@ const SelectInput: FC<SelectInputPropTypes> = ({
           </SelectOption>
         ))}
       </SelectBox>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </SelectInputContainer>
   )
 }

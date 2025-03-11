@@ -3,9 +3,11 @@
 import { FC } from "react";
 import get from "lodash/get";
 import { Button, PaginationContainer } from "./pagination.elements";
+import { Table } from "@tanstack/react-table";
+import { TableDataType } from "@/types/submissions.types";
 
 export interface PaginationPropTypes {
-  table: any;
+  table: Table<TableDataType>;
 }
 
 const Pagination: FC<PaginationPropTypes> = ({ table }) => {

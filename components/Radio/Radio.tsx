@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { DataItemType, RadioPropTypes } from "./radio.types";
 import { MainContainer, MainLabel, RadioContainer, RadioElement, RadioLabel } from "./radio.elements";
-import { ErrorMessage } from "@/elements/comman.element";
+import { ErrorMessage } from "@/elements/common.element";
 
 const Radio: FC<RadioPropTypes> = ({
   id,

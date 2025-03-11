@@ -4,6 +4,7 @@ import { MultiSelectPropType } from "./multiselect.types";
 import { CheckBox, MainLabel, MainView, MenuContainer, MultiSelectContainer, RowLabel } from "./multiselect.elements";
 
 const MultiSelect: FC<MultiSelectPropType> = ({
+  label,
   options,
   selectedItems,
   setSelectedItems,
@@ -23,7 +24,7 @@ const MultiSelect: FC<MultiSelectPropType> = ({
   return (
     <MultiSelectContainer className={className}>
       <MainView onClick={toggleSelect} >
-        <MainLabel>Columns to show</MainLabel>
+        <MainLabel>{label}</MainLabel>
         <IoChevronDown className="size-4" />
       </MainView>
       {isOpen && (

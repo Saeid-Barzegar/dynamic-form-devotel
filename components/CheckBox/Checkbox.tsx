@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { CheckBoxContainer, CheckBoxElement, CheckBoxItem, CheckBoxLabel } from "./checkbox.elements";
 import { CheckBoxGroupProps } from "./checkbox.types";
-import { ErrorMessage } from "@/elements/comman.element";
+import { ErrorMessage } from "@/elements/common.element";
 
 const CheckBoxGroup: FC<CheckBoxGroupProps> = ({
   label,

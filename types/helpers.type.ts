@@ -1,13 +1,13 @@
-import { SubFieldType } from "@/types/formType";
+import { FieldType } from "@/types/formType";
 
 export interface DynamicFieldInputTypes {
-  field: SubFieldType,
+  field: FieldType,
   watch: (key: string) => string;
   callback: (data: string[]) => void;
 }
 
 export interface VisibilityConditionInputTypes {
-  field: SubFieldType,
+  field: FieldType,
   watch: (key: string) => string;
 }
 

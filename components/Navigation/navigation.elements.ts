@@ -1,6 +1,10 @@
 import tw from 'tailwind-styled-components';
 
-export const NavigationContainer = tw.header`text-gray-600 body-font border-b border-solid bg-white border-slate-200 fixed top-0 left-0 w-full z-50`;
+export const NavigationContainer = tw.header`
+  text-gray-600 body-font bg-white 
+  border-b border-solid border-slate-200 
+  fixed top-0 left-0 w-full z-50
+`;
 export const Wrapper = tw.div`container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center`;
 export const LogoContainer = tw.a`flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0`;
 export const Title = tw.span`ml-3 text-xl`;

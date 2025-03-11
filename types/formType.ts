@@ -19,7 +19,7 @@ export interface DynamicOptionsType {
   method: ApiCallMethodType;
 }
 
-export interface SubFieldType {
+export interface FieldType {
   id: string;
   label: string;
   type: InputType;
@@ -27,17 +27,12 @@ export interface SubFieldType {
   options?: string[];
   visibility?: VisibilityType;
   dynamicOptions?: DynamicOptionsType,
-  validation: any;
-}
-
-export interface FieldType {
-  id: string;
-  label: string;
-  type: InputType;
-  required: boolean;
-  options?: string[];
-  dynamicOptions?: DynamicOptionsType,
-  fields?: SubFieldType
+  validation: {
+    max?: number;
+    min?: number;
+    pattern?: RegExp;
+  };
+  fields?: FieldType[]
 }
 
 export interface FormDataItemType {
@@ -45,8 +40,6 @@ export interface FormDataItemType {
   title: string;
   fields: FieldType[];
 }
-
-
 
 export interface FormStatType {
     insuranceType: string;

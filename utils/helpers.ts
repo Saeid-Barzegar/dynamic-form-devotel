@@ -71,7 +71,7 @@ export const getDynamicFields: (data: DynamicFieldInputTypes) => Promise<void> =
   }
 };
 
-export const mapCulumnsToShowInTable = (columnVisibility: Record<string, boolean>) => {
+export const mapColumnsToShowInTable = (columnVisibility: Record<string, boolean>) => {
   const newList = []
   for (let item in columnVisibility) {
     if (columnVisibility[item] === true) {

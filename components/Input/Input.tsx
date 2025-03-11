@@ -3,6 +3,7 @@
 import { FC } from 'react';
 import { InputContainer, InputElement, InputLabel } from './input.elements';
 import { InputPropTypes } from './input.types';
+import { ErrorMessage } from '@/elements/common.element';
 
 const Input: FC<InputPropTypes> = ({
   id,
@@ -10,6 +11,7 @@ const Input: FC<InputPropTypes> = ({
   label,
   register,
   className,
+  error,
   ...otherProps
 }) => {
   return (
@@ -21,6 +23,7 @@ const Input: FC<InputPropTypes> = ({
         {...register}
         {...otherProps}
       />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </InputContainer>
   )
 }

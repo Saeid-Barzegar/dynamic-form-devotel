@@ -1,19 +1,26 @@
 "use client"
-
+// libraries
 import { FC } from "react";
 import DatePicker from "react-datepicker";
+// types
 import { DateInputPropTypes } from "./dateInput.types";
+// elements
 import { Container, Label } from "./dateInput.elements";
+import { ErrorMessage } from "../Radio/radio.elements";
+// styles
 import "react-datepicker/dist/react-datepicker.css";
 
 const DateInput: FC<DateInputPropTypes> = ({
   id,
   label,
   date,
-  onSelect
+  onSelect,
+  error,
+  required,
+  className
 }) => {
   return (
-    <Container>
+    <Container className={className}>
       <Label htmlFor={id}>{label}</Label>
       <DatePicker
         id={id}
@@ -21,7 +28,10 @@ const DateInput: FC<DateInputPropTypes> = ({
         selected={date}
         dateFormat={`yyyy / MM / dd`}
         onSelect={onSelect}
+        required={required}
+        autoComplete="off"
       />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Container>
   )
 }

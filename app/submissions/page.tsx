@@ -1,9 +1,6 @@
 "use client";
-
+// libraries
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { ENDPOINTS } from "@/constants/endpoints";
-import { PageContainer } from "@/elements/comman.element";
-import useFetch from "@/hooks/useFetch";
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,18 +10,32 @@ import {
   SortingState,
   Column,
 } from "@tanstack/react-table";
-import MultiSelect from "@/components/MultiSelect/MultiSelect";
-import { mapCulumnsToShowInTable } from "@/utils/helpers";
+// constants
+import { ENDPOINTS } from "@/constants/endpoints";
+// elements
+import { PageContainer } from "@/elements/common.element";
+import { PageTitle } from "@/elements/submissions.element";
+// hooks
+import useFetch from "@/hooks/useFetch";
+// types
 import { TableDataType } from "@/types/submissions.types";
+// helper functions
+import { mapColumnsToShowInTable } from "@/utils/helpers";
+// components
+import MultiSelect from "@/components/MultiSelect/MultiSelect";
 import Table from "@/components/Table/Table";
+import Loading from "@/components/Loading/Loading";
+import ErrorComponent from "@/components/ErrorComponent/ErrorComponent";
+
+
 
 const Submissions = () => {
   /**
    * all pagination data should come from API
    * but here because API only returns pure data
-   * PAGE_SIZE hardcoded here
+   * TABLE_PAGE_SIZE hardcoded here
    */
-  const PAGE_SIZE = 10;
+  const TABLE_PAGE_SIZE = 10;
 
   const { error, isPending, data } = useFetch<TableDataType>(ENDPOINTS.FORM_SUBMISSIONS);
   // Add default value to table data once api being called
@@ -53,7 +64,7 @@ const Submissions = () => {
    * any useCallback and useMemo in these cases
    * */
   const handleSort = useCallback(
-    (column: Column<any, unknown>) => {
+    (column: Column<TableDataType, unknown>) => {
       column.toggleSorting(column.getIsSorted() === "asc");
     },
     []
@@ -86,23 +97,23 @@ const Submissions = () => {
     getSortedRowModel: getSortedRowModel(),
     state: { columnVisibility, sorting },
     onSortingChange: setSorting,
-    pageCount: Math.ceil(tableData.data.length / PAGE_SIZE),
-    initialState: { pagination: { pageSize: PAGE_SIZE } },
+    pageCount: Math.ceil(tableData.data.length / TABLE_PAGE_SIZE),
+    initialState: { pagination: { pageSize: TABLE_PAGE_SIZE } },
   });
 
-  if (isPending) return <h1>Loading...</h1>;
-  if (error) return <h1>Oops! Something went wrong.</h1>;
+  if (isPending) return <Loading isLoading={isPending} />;
+  if (error) return <ErrorComponent />;
 
   return (
     <PageContainer>
-      <h2 className="text-xl font-semibold">Submitted Applications</h2>
-
-      {/* Column Selection */}
-      <div className="mt-4 flex justify-end">
+      <PageTitle>Submitted Applications</PageTitle>
+      {/* Column Filtering to control columns in table */}
+      <div className="w-full mt-4 flex justify-end">
         <MultiSelect
           className="w-64"
+          label="Columns to show"
           options={tableData.columns}
-          selectedItems={mapCulumnsToShowInTable(columnVisibility)}
+          selectedItems={mapColumnsToShowInTable(columnVisibility)}
           setSelectedItems={(options: string[]) => {
             const newList = { ...columnVisibility };
             Object.keys(newList).forEach((key) => {
@@ -113,7 +124,7 @@ const Submissions = () => {
         />
       </div>
 
-      {/* Table */}
+      {/* Data Table */}
       <Table table={table} />
 
     </PageContainer>
