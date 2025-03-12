@@ -50,7 +50,7 @@ const Submissions = () => {
 
   // Initialize column visibility only when tableData.columns changes
   useEffect(() => {
-    if (tableData.columns.length > 0) {
+    if (tableData?.columns.length > 0) {
       setColumnVisibility((prev) => {
         const newVisibility = Object.fromEntries(tableData.columns.map((col) => [col, true]));
         return prev && Object.keys(prev).length === tableData.columns.length ? prev : newVisibility;

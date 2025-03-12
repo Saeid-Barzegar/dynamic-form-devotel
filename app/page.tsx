@@ -114,7 +114,7 @@ export default function Home() {
      * means data already fetched and no need to fetch again
      * so we set isLoading to false if it's true
      */
-    if (dynamicField.length > 0) {
+    if (dynamicField && dynamicField.length > 0) {
       setIsLoading(false)
     }
   }, [dynamicField]);
