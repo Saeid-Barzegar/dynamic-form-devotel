@@ -26,6 +26,7 @@ import MultiSelect from "@/components/MultiSelect/MultiSelect";
 import Table from "@/components/Table/Table";
 import Loading from "@/components/Loading/Loading";
 import ErrorComponent from "@/components/ErrorComponent/ErrorComponent";
+import { get } from "lodash";
 
 
 
@@ -48,15 +49,18 @@ const Submissions = () => {
   const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({});
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  const tableColumns = useMemo(() => get(tableData, "columns", []), [tableData]);
+
+
   // Initialize column visibility only when tableData.columns changes
   useEffect(() => {
-    if (tableData?.columns.length > 0) {
+    if (tableColumns.length > 0) {
       setColumnVisibility((prev) => {
-        const newVisibility = Object.fromEntries(tableData?.columns.map((col) => [col, true]));
-        return prev && Object.keys(prev).length === tableData?.columns.length ? prev : newVisibility;
+        const newVisibility = Object.fromEntries(tableColumns.map((col) => [col, true]));
+        return prev && Object.keys(prev).length === tableColumns.length ? prev : newVisibility;
       });
     }
-  }, [tableData?.columns]);
+  }, [tableColumns]);
 
   /** 
    * Sorting toggle handler (useCallback to prevent unnecessary re-renders)
@@ -73,7 +77,7 @@ const Submissions = () => {
   // Column definitions with sorting
   const columns = useMemo<ColumnDef<any>[]>(
     () =>
-      tableData?.columns.map((col) => ({
+      tableColumns.map((col) => ({
         accessorKey: col,
         header: ({ column }) => (
           <button
@@ -85,19 +89,20 @@ const Submissions = () => {
           </button>
         ),
       })),
-    [tableData?.columns, handleSort]
+    [tableColumns, handleSort]
   );
 
   // Table instance
+  const tableDataSet = useMemo(() => get(tableData, "data", []), [tableData]);
   const table = useReactTable({
-    data: tableData?.data,
+    data: tableDataSet,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: { columnVisibility, sorting },
     onSortingChange: setSorting,
-    pageCount: Math.ceil(tableData?.data.length / TABLE_PAGE_SIZE),
+    pageCount: Math.ceil(tableDataSet.length / TABLE_PAGE_SIZE),
     initialState: { pagination: { pageSize: TABLE_PAGE_SIZE } },
   });
 
@@ -112,7 +117,7 @@ const Submissions = () => {
         <MultiSelect
           className="w-64"
           label="Columns to show"
-          options={tableData?.columns}
+          options={tableColumns}
           selectedItems={mapColumnsToShowInTable(columnVisibility)}
           setSelectedItems={(options: string[]) => {
             const newList = { ...columnVisibility };
