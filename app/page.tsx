@@ -272,8 +272,6 @@ export default function Home() {
     );
   }
 
-  console.log({ isLoading })
-
   if (isPending) return <Loading isLoading={isPending} />
   if (error) return <ErrorComponent />;
 
