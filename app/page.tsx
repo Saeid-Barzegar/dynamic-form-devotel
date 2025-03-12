@@ -124,7 +124,7 @@ export default function Home() {
      * if country changes, dynamicField will be cleared
      * to don't effect on other forms
      */
-    if (dynamicField.length > 0) {
+    if (dynamicField && dynamicField.length > 0) {
       setDynamicField([])
     }
   }, [country]);
