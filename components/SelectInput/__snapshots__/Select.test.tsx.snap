@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectInput should render correctly 1`] = `
+<div>
+  <div
+    class="relative"
+  >
+    <label
+      class="block font-medium text-gray-900 text-lg"
+      for="example-id"
+    >
+      Example Label
+    </label>
+    <svg
+      class="text-lg absolute right-3 bottom-[15px] text-gray-500"
+      fill="currentColor"
+      height="1em"
+      stroke="currentColor"
+      stroke-width="0"
+      viewBox="0 0 512 512"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m112 184 144 144 144-144"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="48"
+      />
+    </svg>
+    <select
+      class="appearance-none mt-1.5 w-full px-2 py-3 cursor-pointer rounded-md border border-solid border-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white pr-10"
+      id="example-id"
+      name="testRadio"
+    >
+      <option
+        class="text-gray-400"
+        value=""
+      >
+        -- Select an option --
+      </option>
+      <option
+        class="text-gray-700"
+        value="value1"
+      >
+        Option 1
+      </option>
+      <option
+        class="text-gray-700"
+        value="value2"
+      >
+        Option 2
+      </option>
+    </select>
+  </div>
+</div>
+`;

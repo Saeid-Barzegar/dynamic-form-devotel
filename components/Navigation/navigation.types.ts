@@ -6,5 +6,5 @@ export type NavigationItemType = {
 }
 
 export interface NavigationPropTypes {
-  title: string;
+  title?: string;
  };

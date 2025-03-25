@@ -8,14 +8,14 @@ import { BiSolidShieldPlus } from "react-icons/bi";
 import { NavigationItemType, NavigationPropTypes } from './navigation.types';
 import { LogoContainer, NavBar, NavigationContainer, Title, Wrapper } from './navigation.elements';
 
-const Navigation: FC<NavigationPropTypes> = ({ title }) => {
+const Navigation: FC<NavigationPropTypes> = ({ title = "" }) => {
   const pathname = usePathname();
   return (
     <NavigationContainer>
       <Wrapper>
         <LogoContainer href='/'>
           <BiSolidShieldPlus className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" />
-          <Title>{title}</Title>
+          <Title data-testId="Navigation-title">{title}</Title>
         </LogoContainer>
         <NavBar>
           {NAVIGATION_ITEMS.map((item: NavigationItemType) => (
