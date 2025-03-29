@@ -15,7 +15,6 @@ const MultiSelect: FC<MultiSelectPropType> = ({
   const toggleSelect = () => setIsOpen(prevState => !prevState);
 
   const handleCheckboxChange = (value: string) => {
-    console.log({ value, selectedItems })
     const newList = selectedItems.includes(value)
       ? selectedItems.filter(item => item !== value)
       : [...selectedItems, value]

@@ -23,11 +23,11 @@ export interface FieldType {
   id: string;
   label: string;
   type: InputType;
-  required: boolean;
+  required?: boolean;
   options?: string[];
   visibility?: VisibilityType;
   dynamicOptions?: DynamicOptionsType,
-  validation: {
+  validation?: {
     max?: number;
     min?: number;
     pattern?: RegExp;

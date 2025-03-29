@@ -1,6 +1,7 @@
-import get from 'lodash/get'
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import { FormDataItemType } from "../types/formType";
-import {  VisibilityConditionInputTypes, DynamicFieldInputTypes} from "@/types/helpers.type";
+import { VisibilityConditionInputTypes, DynamicFieldInputTypes} from "@/types/helpers.type";
 import { COUNTRY_MAPPER } from "../constants/mappers";
 
 export const inputDataMapper = (data: string[]) => data.map((item, index) => ({
@@ -19,8 +20,9 @@ export const hasVisibilityCondition: (data: VisibilityConditionInputTypes) => bo
   field,
   watch
 }) => {
-  const visibility = field.visibility;
-  if (!visibility) return true;
+  const visibility = get(field, 'visibility', null);
+  console.log({ cond: isEmpty(visibility)})
+  if (isEmpty(visibility)) return true;
 
   const { dependsOn, condition, value } = visibility;
   const dependencyValue = watch(dependsOn)?.toLowerCase();
@@ -42,7 +44,7 @@ export const getDynamicFields: (data: DynamicFieldInputTypes) => Promise<void> =
   const { dependsOn, endpoint, method } = dynamicOptions;
   const dependentValue = watch(dependsOn);
 
-  if (!dependentValue) return;
+  if (isEmpty(dependentValue)) return;
 
   try {
     let query = "";
@@ -59,8 +61,8 @@ export const getDynamicFields: (data: DynamicFieldInputTypes) => Promise<void> =
 
     const response = await fetch(dynamicFieldUrl, headers);
 
+    console.log(response)
     if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
-
     const data = await response.json();
 
     if (data && dependsOn === "country") {
@@ -73,7 +75,7 @@ export const getDynamicFields: (data: DynamicFieldInputTypes) => Promise<void> =
 
 export const mapColumnsToShowInTable = (columnVisibility: Record<string, boolean>) => {
   const newList = []
-  for (let item in columnVisibility) {
+  for (const item in columnVisibility) {
     if (columnVisibility[item] === true) {
       newList.push(item)
     }

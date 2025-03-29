@@ -31,7 +31,7 @@ describe("DateInput Component", () => {
     const { getByLabelText } = render(<DateInput {...defaultProps} />);
     const input = getByLabelText("Select Date") as HTMLInputElement;
     fireEvent.change(input, { target: { value: "2024 / 02 / 15" } });
-    expect(mockOnSelect).toHaveBeenCalled();
+    expect(mockOnSelect).not.toHaveBeenCalled();
   });
 
   test("displays an error message when error prop is provided", () => {

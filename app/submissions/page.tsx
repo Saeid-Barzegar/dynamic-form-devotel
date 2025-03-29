@@ -9,6 +9,7 @@ import {
   ColumnDef,
   SortingState,
   Column,
+  ColumnVisibility,
 } from "@tanstack/react-table";
 // constants
 import { ENDPOINTS } from "@/constants/endpoints";
@@ -57,6 +58,7 @@ const Submissions = () => {
     if (tableColumns.length > 0) {
       setColumnVisibility((prev) => {
         const newVisibility = Object.fromEntries(tableColumns.map((col) => [col, true]));
+        console.log('Melody >>>', JSON.stringify(newVisibility))
         return prev && Object.keys(prev).length === tableColumns.length ? prev : newVisibility;
       });
     }
@@ -73,6 +75,8 @@ const Submissions = () => {
     },
     []
   );
+
+  console.log({ ColumnVisibility, tableColumns })
 
   // Column definitions with sorting
   const columns = useMemo<ColumnDef<any>[]>(
